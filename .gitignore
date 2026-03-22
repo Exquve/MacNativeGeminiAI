@@ -1,0 +1,33 @@
+# Swift / SPM
+.build/
+.swiftpm/
+Package.resolved
+*.xcodeproj/
+*.xcworkspace/
+xcuserdata/
+DerivedData/
+
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+._*
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Secrets - NEVER commit API keys
+.env
+.env.*
+secrets.json
+*.pem
+*.key
+
+# Archives
+*.ipa
+*.dSYM.zip
+*.dSYM
