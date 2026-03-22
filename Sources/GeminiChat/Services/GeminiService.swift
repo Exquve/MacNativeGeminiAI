@@ -85,6 +85,10 @@ enum GeminiError: LocalizedError {
 
     var errorDescription: String? {
         switch self {
+        case .httpError(429):
+            "Rate limit exceeded. Please wait a moment and try again."
+        case .httpError(401), .httpError(403):
+            "Invalid API key. Check your key in Settings."
         case .httpError(let code):
             "HTTP error \(code)"
         case .apiError(_, let message):

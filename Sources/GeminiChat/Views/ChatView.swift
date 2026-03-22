@@ -9,7 +9,7 @@ struct ChatView: View {
 
             // Floating bubbles grow upward
             ScrollView {
-                LazyVStack(spacing: 8) {
+                VStack(spacing: 8) {
                     ForEach(appState.messages) { message in
                         MessageBubbleView(message: message)
                     }
@@ -22,6 +22,8 @@ struct ChatView: View {
                     }
                 }
                 .padding(.horizontal, 20)
+                .frame(maxWidth: .infinity, maxHeight: .infinity)
+                .contentShape(Rectangle())
             }
             .defaultScrollAnchor(.bottom)
             .scrollIndicators(.never)
@@ -30,7 +32,9 @@ struct ChatView: View {
             InputFieldView()
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
-        .background(.clear)
+        // Nearly invisible background so the window captures
+        // mouse/scroll events even in transparent areas
+        .background(Color.black.opacity(0.001))
     }
 }
 
