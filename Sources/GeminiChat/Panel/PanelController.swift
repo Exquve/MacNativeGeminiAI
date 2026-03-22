@@ -6,6 +6,7 @@ final class PanelController {
     static let shared = PanelController()
 
     private var panel: ChatPanel?
+    private var clickMonitor: Any?
 
     private init() {}
 
@@ -37,11 +38,13 @@ final class PanelController {
         }
 
         AppState.shared.isPanelVisible = true
+        startMonitoringClicks()
     }
 
     func hide() {
         guard let panel, panel.isVisible else { return }
         AppState.shared.isPanelVisible = false
+        stopMonitoringClicks()
 
         NSAnimationContext.runAnimationGroup({ context in
             context.duration = 0.15
@@ -51,6 +54,26 @@ final class PanelController {
             panel?.orderOut(nil)
             panel?.alphaValue = 1
         })
+    }
+
+    // Global monitor: only fires for clicks OUTSIDE our app's windows.
+    // Clicks inside the panel (TextField, buttons) never trigger this.
+    private func startMonitoringClicks() {
+        stopMonitoringClicks()
+        clickMonitor = NSEvent.addGlobalMonitorForEvents(
+            matching: [.leftMouseDown, .rightMouseDown]
+        ) { [weak self] _ in
+            Task { @MainActor in
+                self?.hide()
+            }
+        }
+    }
+
+    private func stopMonitoringClicks() {
+        if let monitor = clickMonitor {
+            NSEvent.removeMonitor(monitor)
+            clickMonitor = nil
+        }
     }
 
     private func positionAtBottomCenter() {

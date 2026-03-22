@@ -33,12 +33,12 @@ class ChatPanel: NSPanel {
     override var canBecomeKey: Bool { true }
     override var canBecomeMain: Bool { false }
 
+    // Escape dismisses the panel
     override func cancelOperation(_ sender: Any?) {
         PanelController.shared.hide()
     }
 
-    override func resignKey() {
-        super.resignKey()
-        PanelController.shared.hide()
-    }
+    // NO resignKey override — it caused the panel to close
+    // on Enter/send button clicks. Outside-click dismissal
+    // is handled by a global mouse event monitor in PanelController.
 }
